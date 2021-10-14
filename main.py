@@ -10,8 +10,8 @@ import pyautogui
 import pogoda
 import newsy
 import psutil
-# siema
-# siema
+
+
 engine = pyttsx3.init()
 engine.setProperty("rate", 170)
 voices = engine.getProperty('voices')
