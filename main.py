@@ -10,13 +10,20 @@ import pyautogui
 import pogoda
 import newsy
 import psutil
-# siema
+
+
+
+# engine = pyttsx3.init()
+# engine.setProperty("rate", 170)
+# voices = engine.getProperty('voices')
 
 
 engine = pyttsx3.init()
-engine.setProperty("rate", 170)
-voices = engine.getProperty('voices')
-
+voices=engine.getProperty('voices')
+# engine.setProperty("rate", 171)
+# voices = engine.getProperty('voices')
+engine.setProperty("voice", voices[2].id)
+engine.setProperty("rate", 178)
 
 def speak(text):
     engine.say(text)
@@ -76,7 +83,7 @@ def alarm():
     dzwonek()
 
 
-# speak("Asystent głosowy kalmus-boks 2048 ")
+speak("Asystent głosowy kalmus-boks 2048 ")
 speak("Proszę czekać, ładuje systemy")
 # speak("3")
 # speak("2")
@@ -230,6 +237,7 @@ if __name__ == '__main__':
             remember = open('memory.txt', 'r')
             speak("Już ci mówię co to było" + str(remember.read()))
 
+    
         #######*****KOMENDY WINDOWS*****############
 
         elif 'ustaw alarm' in statement:
