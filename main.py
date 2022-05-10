@@ -10,7 +10,7 @@ import pyautogui
 import pogoda
 import newsy
 import psutil
-
+from os.path import exists
 
 
 # engine = pyttsx3.init()
@@ -20,7 +20,7 @@ import psutil
 
 engine = pyttsx3.init()
 voices=engine.getProperty('voices')
-# engine.setProperty("rate", 171)
+# engine.setProperty("rate", 150)
 # voices = engine.getProperty('voices')
 engine.setProperty("voice", voices[2].id)
 engine.setProperty("rate", 178)
@@ -43,7 +43,6 @@ def takeCommand():
     with sr.Microphone() as source:
         print("Listening...")
         audio = r.listen(source)
-
         try:
             statement = r.recognize_google(audio, language='pl-pl')
             print(f"Uzytkownik powiedział:{statement}\n")
@@ -83,8 +82,8 @@ def alarm():
     dzwonek()
 
 
-speak("Asystent głosowy kalmus-boks 2048 ")
-speak("Proszę czekać, ładuje systemy")
+# speak("Asystent głosowy kalmus-boks 2048 ")
+# speak("Proszę czekać, ładuje systemy")
 # speak("3")
 # speak("2")
 # speak("1")
@@ -225,19 +224,31 @@ if __name__ == '__main__':
             print('CPU usage is at ' + usage)
 
         elif 'zapamiętasz coś' in statement:
-            speak('Co takiego???')
-            memory = takeCommand()
-            speak("Zapamiętałam" + memory)
-            remember = open('memory.txt', 'w')
-            remember.write(memory)
-            remember.close()
+            if os.path.isfile('memory.txt'):
+                speak("Plik istnieje. Najpierw go usuń komendą usuń plik pamięci")
+            else:
+                speak('Co takiego???')
+                memory = takeCommand()
+                speak("Zapamiętałam" + memory)
+                remember = open('memory.txt', 'w')
+                remember.write(memory)
+                remember.close()
 
 
         elif 'masz coś w pamięci' in statement or "pamiętasz o czymś" in statement:
             remember = open('memory.txt', 'r')
             speak("Już ci mówię co to było" + str(remember.read()))
+            
 
-    
+
+        elif 'usuń plik pamięci' in statement:
+            if os.path.isfile('memory.txt'):
+                os.chmod('memory.txt', 0o777)
+                os.remove("memory.txt")
+                speak('Plik został usunięty!')
+            else:
+                speak('Plik nie istnieje Ser!')
+
         #######*****KOMENDY WINDOWS*****############
 
         elif 'ustaw alarm' in statement:
@@ -264,7 +275,8 @@ if __name__ == '__main__':
         elif "przewiń do dołu" in statement or "do dołu" in statement:
             pyautogui.scroll(-2000)
 
-
+        elif "wycinek" in statement:
+            pyautogui.hotkey('win', 'shift', 's')
         elif "zrób screenshota" in statement or "zrobisz zrzut ekranu" in statement:
             speak("Jasne, jak nazwać plik")
             name = takeCommand().lower()
@@ -326,7 +338,7 @@ otwórz gmail
 ktora jest godzina
 wyszukaj
 zapamiętasz coś
-masz coś w pamięci
+masz coś w pamięci     
 jaka jest pogoda
 słuchamy czegoś
 puść playlistę
