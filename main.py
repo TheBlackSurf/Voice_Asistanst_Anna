@@ -1,3 +1,4 @@
+from asyncore import read
 import random
 import winsound
 import speech_recognition as sr
@@ -11,7 +12,8 @@ import pogoda
 import newsy
 import psutil
 from os.path import exists
-
+import pyperclip
+from deep_translator import GoogleTranslator
 
 # engine = pyttsx3.init()
 # engine.setProperty("rate", 170)
@@ -143,6 +145,16 @@ if __name__ == '__main__':
             print('koniec')
 
         #######*****INTERNET*****############
+        elif 'tłumacz to' in statement or 'przetłumacz to' in statement:
+            pyautogui.hotkey('ctrl', 'c')
+            pasteText = pyperclip.paste()
+            translated = GoogleTranslator(source='auto', target='pl').translate(pasteText)
+            speak(translated)
+
+        elif 'Przeczytaj to' in statement or 'czytaj' in statement:
+            pyautogui.hotkey('ctrl', 'c')
+            pasteText = pyperclip.paste()
+            speak(pasteText)
 
         elif 'otwórz github' in statement or "github" in statement:
             speak('Czego szukamy????')
@@ -173,6 +185,11 @@ if __name__ == '__main__':
             statement = statement.replace("wyszukaj", "")
             webbrowser.open_new_tab(f"https://www.google.com/search?client=firefox-b-d&q={statement}")
             # time.sleep(5)
+        
+        elif 'przeglądarka' in statement or 'otwórz przegladarkę' in statement:
+            speak("Jaką stronę otworzyć?")
+            website = takeCommand().lower()
+            webbrowser.open_new_tab(f"https://{website}")
 
         elif 'co na ból głowy' in statement:
             speak('Zaparz sobię ciepłej herbatki i pod kocyk')
@@ -317,6 +334,7 @@ if __name__ == '__main__':
                 in statement or 'co dziś' in statement:
             today = datetime.date.today()
             speak(today)
+
 
 
         elif "wszystkie komendy" in statement or "komendy" in statement:
